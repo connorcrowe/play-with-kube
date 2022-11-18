@@ -51,5 +51,5 @@ jobs:
           exit $?
       - name: Push image
         run: | 
-          docker tag ghcr.io/connorcrowe/play-with-kube:backend-${{ github.sha }} ghcr.io/connorcrowe/play-with-kube
+          docker tag ghcr.io/connorcrowe/play-with-kube:backend-${{ github.sha }} ghcr.io/connorcrowe/play-with-kube:backend
           docker push ghcr.io/connorcrowe/play-with-kube:backend
