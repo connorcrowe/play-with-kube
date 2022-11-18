@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <head>
     <title>Test app for Kube</title>
+    <meta charset="UTF-8">
 </head>
 <body>
-    <h1 style="">Don't you DARE call that backend</h1>
+    <h1>Don't you DARE call that backend</h1>
     <button onclick="callBackend()" style="font-size: 48px">Call backend? 🥺👉👈 </button>
 </body>
 
@@ -33,7 +35,7 @@
         });
     };
 
-    async \function callBackend(){
+    async function callBackend(){
         let result = await request("GET", window.location.origin + "/api/hello");
         console.log(result)
     }
