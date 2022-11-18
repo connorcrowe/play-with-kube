@@ -45,7 +45,7 @@ jobs:
       - name: Pull and run tests
         run: |
           docker pull ghcr.io/connorcrowe/play-with-kube:backend-${{ github.sha }}
-          docker run -d -p 8080:8080 -e APP_PORT=8080 ghcr.io/connorcrowe/play-with-kube:backend-${{ github.sha }}
+          docker run -p 8080:8080 -e APP_PORT=8080 ghcr.io/connorcrowe/play-with-kube:backend-${{ github.sha }} &
           sleep 10
           curl localhost:8080/api/status
           exit $?
