@@ -47,6 +47,7 @@ jobs:
         run: |
           docker pull ghcr.io/connorcrowe/play-with-kube:frontend-${{ github.sha }}
           docker run -d -p 8000:8000 ghcr.io/connorcrowe/play-with-kube:frontend-${{ github.sha }}
+          sleep 10
           curl localhost:8000/
           exit $?
       - name: Push new image
