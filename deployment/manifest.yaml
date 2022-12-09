@@ -1,0 +1,95 @@
+# Deployment Backend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-app
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+      - name: backend
+        image: ghcr.io/connorcrowe/play-with-kube:backend
+        env:
+          - name: APP_PORT
+            value: "8080"
+        ports:
+          - containerPort: 8080
+--- # Service Backend
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-svc
+  spec:
+    selector:
+      app: backend-app
+    ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8000
+--- # Deployment Frontend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec: 
+      containers:
+      - name: frontend
+        image: ghcr.io/connorcrowe/play-with-kube:frontend
+        command: [ "bash", "-c", "python3 -m http.server 2>&1" ]
+        ports:
+          - containerPort: 8000
+--- # Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  spec:
+    selector:
+      app: frontend-app
+    ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8000
+--- # Ingress
+kind: Ingress
+metadata:
+  name: kube-ingress
+spec:
+  rules:
+    - host: toy.localhost
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/api"
+            backend:
+              service:
+                name: backend-svc
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: frontend-svc
+                port:
+                  number: 80
